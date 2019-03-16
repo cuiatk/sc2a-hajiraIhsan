@@ -6,7 +6,9 @@ package twitter;
 import static org.junit.Assert.*;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Test;
@@ -21,9 +23,19 @@ public class ExtractTest {
     
     private static final Instant d1 = Instant.parse("2016-02-17T10:00:00Z");
     private static final Instant d2 = Instant.parse("2016-02-17T11:00:00Z");
+    private static final Instant d3 = Instant.parse("2018-03-17T11:00:00Z");
+    private static final Instant d4 = Instant.parse("2018-03-17T11:45:00Z");
+    private static final Instant d5 = Instant.parse("2018-03-17T11:47:00Z");
+    private static final Instant d6 = Instant.parse("2018-03-17T10:47:00Z");
+
     
-    private static final Tweet tweet1 = new Tweet(1, "alyssa", "is it reasonable to talk about rivest so much?", d1);
-    private static final Tweet tweet2 = new Tweet(2, "bbitdiddle", "rivest talk in 30 minutes #hype", d2);
+    private static final Tweet tweet1 = new Tweet(1, "Amna", "is it reasonable to talk about rivest so much?", d1);
+    private static final Tweet tweet2 = new Tweet(2, "Kainat", "rivest talk in 30 minutes #hype", d2);
+    private static final Tweet tweet3 = new Tweet(3, "beenish", "How can we please pass this test??", d3);
+    private static final Tweet tweet4 = new Tweet(4, "Farrah", "@test1 how can you perform test?",d4);
+    private static final Tweet tweet5 = new Tweet(5, "Anum", "@test1 @test2 SC is a Good Subject",d5);
+    private static final Tweet tweet6 = new Tweet(6, "Sana", "@test1 @test1 SC is a Good Subject",d6);
+
     
     @Test(expected=AssertionError.class)
     public void testAssertionsEnabled() {
@@ -37,12 +49,48 @@ public class ExtractTest {
         assertEquals("expected start", d1, timespan.getStart());
         assertEquals("expected end", d2, timespan.getEnd());
     }
+    @Test
+
+    public void testGetTimespanOneTweet() {
+
+        Timespan timespan = Extract.getTimespan(Arrays.asList(tweet1));
+
+        assertEquals("start",d1, timespan.getStart());
+
+        assertEquals("end",d1, timespan.getEnd());        
+     }
+
+    @Test
+    public void testGetTimespanThreeTweets() {
+        Timespan timespan = Extract.getTimespan(Arrays.asList(tweet1, tweet2, tweet3));
+
+        assertEquals(d1, timespan.getStart());
+        assertEquals(d3, timespan.getEnd());
+    }
+
+    @Test
+
+    public void testGetTimespanNoTweet() {
+
+    	ArrayList empty = new ArrayList<Tweet>();
+        Timespan timespan = Extract.getTimespan(empty);
+
+        assertEquals(timespan.getEnd(), timespan.getStart());         
+
+    }
+
+    
     
     @Test
     public void testGetMentionedUsersNoMention() {
         Set<String> mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet1));
         
         assertTrue("expected empty set", mentionedUsers.isEmpty());
+    }
+    @Test
+    public void testGetEmptyTweet() {
+        Timespan timespan = Extract.getTimespan(new ArrayList<Tweet>());
+        assertEquals(timespan.getEnd(), timespan.getStart());         
     }
 
     /*
@@ -58,5 +106,44 @@ public class ExtractTest {
      * them in a different class. If you only need them in this test class, then
      * keep them in this test class.
      */
+   
+
+    @Test
+    public void testGetMentionedUsersOneMentionOneTweet() {   
+
+        Set<String> mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet4));
+        Set<String> mentionedUsersLowerCase = new HashSet<>();
+
+        for (String mentionedUser : mentionedUsers) {
+            mentionedUsersLowerCase.add(mentionedUser.toLowerCase());
+        }
+        assertTrue(mentionedUsersLowerCase.contains("test1"));
+    }
+
+    @Test
+    public void testGetMentionedUsersTwoMentionOneTweet() {   
+
+        Set<String> mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet5));
+        Set<String> mentionedUsersLowerCase = new HashSet<>();
+
+        for (String mentionedUser : mentionedUsers) {
+            mentionedUsersLowerCase.add(mentionedUser.toLowerCase());
+        }
+
+        assertTrue(mentionedUsersLowerCase.containsAll(Arrays.asList("test1", "test2")));
+    }
+
+
+    @Test
+    public void testGetMentionedUsersTwoeMentionOneTweetrepeateduser() {         
+
+        Set<String> mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet6));
+        Set<String> mentionedUsersLowerCase = new HashSet<>();
+
+        for (String mentionedUser : mentionedUsers) {
+            mentionedUsersLowerCase.add(mentionedUser.toLowerCase());
+        }
+        assertTrue(mentionedUsersLowerCase.contains("test1"));
+    }
 
 }
