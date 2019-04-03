@@ -29,9 +29,9 @@ public class ExtractTest {
     private static final Instant d6 = Instant.parse("2018-03-17T10:47:00Z");
 
     
-    private static final Tweet tweet1 = new Tweet(1, "Amna", "is it reasonable to talk about rivest so much?", d1);
-    private static final Tweet tweet2 = new Tweet(2, "Kainat", "rivest talk in 30 minutes #hype", d2);
-    private static final Tweet tweet3 = new Tweet(3, "beenish", "How can we please pass this test??", d3);
+    private static final Tweet tweet1 = new Tweet(1, "Amna", "how can we pass the test?", d1);
+    private static final Tweet tweet2 = new Tweet(2, "Kainat", "Sc is good subject", d2);
+    private static final Tweet tweet3 = new Tweet(3, "beenish", " how to learn ", d3);
     private static final Tweet tweet4 = new Tweet(4, "Farrah", "@test1 how can you perform test?",d4);
     private static final Tweet tweet5 = new Tweet(5, "Anum", "@test1 @test2 SC is a Good Subject",d5);
     private static final Tweet tweet6 = new Tweet(6, "Sana", "@test1 @test1 SC is a Good Subject",d6);
