@@ -31,7 +31,7 @@ import java.util.List;
 public class Filter {
     /**
 
-     * Find tweets written by a particular user.
+     * Find tweetss written by a particular user.
 
      * 
 
